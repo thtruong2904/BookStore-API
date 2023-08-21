@@ -90,6 +90,7 @@ public class UserService implements UserInterface {
         return LoginResponse.builder().userInfoModel(userInfoModel).accessToken(jwtProvider.createToken(userInfoModel)).status(true).build();
     }
 
+
     @Override
     public UserRegisterResponse registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException {
         AccountModel accountModel = accountRepository.findAccountModelByUsername(userRegisterRequest.getUserName());

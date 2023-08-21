@@ -1,12 +1,16 @@
 package com.tranhuutruong.BookStoreAPI.Controller;
 
+import com.tranhuutruong.BookStoreAPI.Request.ProductRequest;
 import com.tranhuutruong.BookStoreAPI.Response.ApiResponse;
 import com.tranhuutruong.BookStoreAPI.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -55,5 +59,18 @@ public class ProductController {
                                                      @RequestParam(name = "size", defaultValue = "10", required = false) Integer size)
     {
         return Mono.just(productService.getPagingProduct(page,size));
+    }
+
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<Object> createProduct(@RequestParam("name") String name,
+                                             @RequestParam("category") String category,
+                                             @RequestParam("description") String description,
+                                             @RequestParam("price") Long price,
+                                             @RequestParam("author") String author,
+                                             @RequestPart("image") FilePart filePart) throws IOException{
+        ProductRequest productRequest = ProductRequest.builder().name(name)
+                .category(category).description(description).price(price)
+                .author(author).image(filePart).build();
+        return productService.createProduct(productRequest, filePart);
     }
 }

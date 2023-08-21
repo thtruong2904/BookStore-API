@@ -21,10 +21,13 @@ import java.io.IOException;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
     private static final Logger logger= LoggerFactory.getLogger(JwtTokenFilter.class);
+
     @Autowired
     private UserDetailService userDetailService;
+
     @Autowired
     private JwtProvider jwtProvider;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
@@ -42,7 +45,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }catch (Exception e)
         {
             logger.error("Can't set user authentication", e);
-
         }
         filterChain.doFilter(request, response);
     }
